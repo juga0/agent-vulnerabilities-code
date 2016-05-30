@@ -49,6 +49,20 @@ def obtain_vendor_product_dict(json_path):
     return vendorproductdict
 
 
+def obtain_cve(json_path, cve):
+    with open(json_path) as f:
+        json_data = json.load(f)
+
+    for vuln in json_data:
+        if vuln['id'] == cve:
+            vulndict = {
+                'cve': vuln.get('id'),
+                'summary': vuln.get('summary'),
+                'severity': textual_cvss(vuln.get('cvss'))
+            }
+        return vulndict
+
+
 def main():
     vendorproductdict = obtain_vendor_product_dict(CVE_SEARCH_JSON_OUTPUT_PATH)
     print vendorproductdict
